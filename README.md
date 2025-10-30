@@ -13,19 +13,21 @@ Firefox: https://www.firefox.com/
 Edge: https://www.microsoft.com/en-us/edge/download
 
 Any .rar files will require an unrar tool to open them and extract any mods inside (it is automatically done, but requires one to be installed). The most consistent one is unRAR,
-which comes as a part of winRAR: https://www.win-rar.com/ (it's free). .zip, .7z, and raw .vpk files should be fine without any additional dependencies.
+which comes as a part of winRAR (it's free). .zip, .7z, and raw .vpk files should be fine without any additional dependencies.
+
+winRAR: https://www.win-rar.com/
 
 This application should be compatible with both Windows and Linux.
 
 # To build it yourself
 
-In order to build the executable, you will need python and some dependencies for the application. It is packaged with PyInstaller, and should be just over ~50MB.
+This program can obviously be run with python, but if you are looking for the binary file, it is not included in the directory because it is too big, and is an unsigned executable. In order to build the executable yourself, you will need python and some dependencies for the application. It is packaged with PyInstaller, and should be just over ~50MB.
 ```
 cd path/to/EZDeadlockModManager/
 pip install -r requirements.txt
 pyinstaller EZDeadlockModManager.py --icon="./resources/icon.ico" --add-data=resources:resources --distpath . --onefile --noconsole 
 ```
-After this your executable should lie in the /EZDeadlockModManager/ directory.
+After this your executable should lie in the main directory.
 
 # Special Thanks
 
