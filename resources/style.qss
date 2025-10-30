@@ -1,0 +1,149 @@
+/* 
+This file is to be imported and loaded before the main window appears.
+
+These are probably the two most used colors (they can't be set as a var in a .qss file):
+DEADLOCK_LIGHT_COLOUR = "#EEDFBF"
+DEADLOCK_DARK_COLOUR = "#0D0D0D"
+*/
+
+* {
+    font-family: "Roboto Condensed Medium";
+    font-size: 17px;
+}
+
+QPushButton {
+    background-color: #EEDFBF;
+}
+
+QCheckBox {
+    margin: 5px;
+}
+
+QCheckBox::indicator {
+    width: 18px;
+    height: 18px;
+}
+
+QCheckBox::indicator:unchecked {
+    border: 1px solid #EEDFBF;
+    background-color: red;
+}
+
+QCheckBox::indicator:checked {
+    border: 1px solid #EEDFBF;
+    background-color: green;
+}
+
+QLineEdit {
+    background-color: #EEDFBF;
+}
+
+#modmanager {
+    background-color: #EEDFBF;
+}
+
+#title {
+    font-family: "Robot Condensed ExtraBold";
+    font-size: 30px;
+    font-weight: bold;
+}
+
+#modlist {
+    background-color: #0D0D0D;
+}
+
+#modlist-item {
+    background-color: #0D0D0D;
+    color: #EEDFBF;
+    font-weight: bold;
+}
+
+#mod-name {
+    color: #EEDFBF;
+    font-size: 18px;
+}
+
+#remove-button {
+    color: #EEDFBF;
+    font-weight: bold;
+    border: 1px solid grey;
+}
+
+#file-warning-good {
+    background-color: green;
+    border-radius: 10px;
+}
+
+#file-warning-bad {
+    background-color: red;
+    border-radius: 10px;
+}
+
+#download-warning {
+    background-color: orange;
+    border-radius: 10px;
+}
+
+#rename-button {
+    color: #EEDFBF;
+    background-color: #0D0D0D;
+    border: 1px solid #EEDFBF;
+}
+
+QMessageBox {
+    background-color: #EEDFBF;
+}
+
+#mod-browser {
+    background-color: #0D0D0D;
+}
+
+#mod-title {
+    font-size: 18px;
+    color: #EEDFBF;
+    border-radius: 7px;
+    border: 2px solid #EEDFBF;
+}
+
+#sound-preview {
+    font-size: 15px;
+    border-radius: 5px;
+    padding: 3px;
+}
+
+#submitter-link {
+    font-family: "Robot Condensed ExtraBold";
+    font-size: 15px;
+    color: #EEDFBF;
+    border-radius: 7px;
+    border: 1px solid #EEDFBF;
+    background-color: #0D0D0D;
+}
+
+#info-label {
+    font-size: 14px;
+    color: #EEDFBF;
+}
+
+#thumbnail {
+    border: 2px solid #EEDFBF;
+    border-radius: 5px;
+}
+
+#details-button {
+    font-size: 15px;
+    border-radius: 5px;
+}
+
+#download-button {
+    border-radius: 7px;
+    padding: 2px;
+}
+
+#download-button:pressed, #details-button:pressed {
+    background-color: #f3e1b90a;
+}
+
+#settings {
+    background-color: #EEDFBF;
+}

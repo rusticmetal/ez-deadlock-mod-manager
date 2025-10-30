@@ -1,0 +1,18 @@
+{
+    "game_folder_location" : "path/to/Deadlock",
+    "rar_tool_location" : "path/to/UnRAR.exe",
+    "mods": [
+        {
+            "name": "Mod #1",
+            "file_path": "path/to/file.vpk",
+            "toggled_on": true,
+            "from_gamebanana": true
+        },
+        {
+            "name": "Mod #2",
+            "file_path": "path/to/file2.vpk",
+            "toggled_on": false,
+            "from_gamebanana": false
+        }
+    ]
+}

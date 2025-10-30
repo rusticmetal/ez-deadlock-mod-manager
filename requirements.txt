@@ -1,0 +1,19 @@
+#the main gui library
+PyQt5
+
+#storing the mods and metadata
+appdirs
+
+#alternate archive file formats
+py7zr
+rarfile
+
+#mod browser and downloader
+cloudscraper
+
+#mod downloader
+selenium
+webdriver_manager
+
+#creating the executable
+pyinstaller
