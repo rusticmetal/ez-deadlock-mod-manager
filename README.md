@@ -29,6 +29,10 @@ pyinstaller EZDeadlockModManager.py --icon="./resources/icon.ico" --add-data=res
 ```
 After this your executable should lie in the main directory.
 
+# Creating Mods
+
+Check the /vpkmaker/ directory to create your own sound mods.
+
 # Special Thanks
 
 Thanks to Valve for making the game, and to GameBanana and all its users for sharing all these mods. Thanks to Google for the font (Roboto).
