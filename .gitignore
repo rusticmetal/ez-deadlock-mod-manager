@@ -1,6 +1,9 @@
 __pycache__
 build
 test_files
-vpkmaker
+vpkmaker/.venv/
+vpkmaker/input/*
+vpkmaker/mods/
+vpkmaker/*.exe
 EZDeadlockModManager.exe
 EZDeadlockModManager.spec
