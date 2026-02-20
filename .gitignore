@@ -1,4 +1,5 @@
 __pycache__
+.venv
 build
 test_files
 vpkmaker/.venv/

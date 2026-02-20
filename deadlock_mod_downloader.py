@@ -35,7 +35,7 @@ PAGE_LOADING_WAIT_TIME = 5 #time spent waiting for webdriver pages to load, in s
 DOWNLOAD_CHUNK_SIZE = 8192
 DOWNLOAD_LINK_CSS_SELECTOR = "a.DownloadLink.GreenColor"
 NSFW_CONTENT_BUTTON_CSS_SELECTOR = "button.ShowNsfwContentButton"
-UP_TO_DATE_MOD_LIST_CSS_SELECTOR = "ul.Flow.Files"
+UP_TO_DATE_MOD_LIST_CSS_SELECTOR = "ul.Flow"
 DOWNLOAD_PAGE_MOD_LINKS_CSS_SELECTOR = "li.File.Flow > div.Cluster.DownloadOptions > a.DownloadLink.GreenColor"
 DOWNLOAD_PAGE_MOD_NAMES_CSS_SELECTOR = "li.File.Flow > div.Cluster > span.FileName"
 
