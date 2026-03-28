@@ -6,7 +6,8 @@
             "name": "Mod #1",
             "file_path": "path/to/file.vpk",
             "toggled_on": true,
-            "from_gamebanana": true
+            "from_gamebanana": true,
+            "link": "https://gamebanana.com/mods/0"
         },
         {
             "name": "Mod #2",

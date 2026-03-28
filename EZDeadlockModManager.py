@@ -14,6 +14,7 @@ import re
 import filecmp
 import errno
 import json
+import webbrowser
 
 try:
     import winreg
@@ -27,12 +28,6 @@ import deadlock_mod_browser
 APPLICATION_TITLE = "EZ Deadlock Mod Manager"
 APPLICATION_DIMENSIONS = [100, 100, 1000, 800]
 WARNING_DIMENSION = 20
-
-#extracted mods are stored in the paths here
-GAMEBANANA_DIRECTORY = os.path.join(APPLICATION_DIRECTORY, "GameBanana")
-MOD_DIRECTORY = os.path.join(GAMEBANANA_DIRECTORY, "Mods")
-SOUND_DIRECTORY = os.path.join(GAMEBANANA_DIRECTORY, "Sounds")
-VPK_DIRECTORY = os.path.join(APPLICATION_DIRECTORY, "VPK Files")
 
 #these are always found under /Deadlock/
 DEADLOCK_ADDON_SUBDIRECTORY = os.path.join("game", "citadel", "addons")
@@ -176,23 +171,27 @@ class ModManager(QWidget):
         self.search_term = ""
 
         #the custom mod list widget
-        self.list_label = QLabel("Drag and drop to change load order! You can also toggle mods on and off!")
+        self.list_label = QLabel("Drag and drop to change load order! Note: Updating will re-download, so please check if new versions exist first with the 'Details' button.")
         self.layout.addWidget(self.list_label)
         self.list_widget = NumberedModListWidget(self)
         self.layout.addWidget(self.list_widget)
 
         #the rest of the buttons
+        first_lower_button_layout = QHBoxLayout()
+
         self.load_button = QPushButton("Load Mod Configuration to Game Folder")
         self.load_button.clicked.connect(self.save_mods)
-        self.layout.addWidget(self.load_button)
+        first_lower_button_layout.addWidget(self.load_button)
 
         self.launch_button = QPushButton("Launch Game (requires Steam running)")
         self.launch_button.clicked.connect(self.start_game)
-        self.layout.addWidget(self.launch_button)
+        first_lower_button_layout.addWidget(self.launch_button)
 
         self.open_settings_button = QPushButton("Settings ⚙️")
         self.open_settings_button.clicked.connect(self.open_settings_menu)
-        self.layout.addWidget(self.open_settings_button)
+        first_lower_button_layout.addWidget(self.open_settings_button)
+
+        self.layout.addLayout(first_lower_button_layout)
 
         #game file warning (changes based on self.game_files_found)
         self.file_warning_widget = QWidget()
@@ -258,7 +257,7 @@ class ModManager(QWidget):
         else:
             self.file_warning.setObjectName("file-warning-bad")
             self.file_warning.style().polish(self.file_warning)
-            self.file_warning_label.setText("Game files not detected! Try clicking the 'change game folder' button!")
+            self.file_warning_label.setText("Game files not detected! Try clicking the 'change game folder' button under the settings!")
 
     def load_settings(self) -> bool:
         '''
@@ -337,7 +336,6 @@ class ModManager(QWidget):
             if os.path.exists(os.path.join(file_path, vpk_name)):
                 mod_already_present = True
                 QMessageBox.information(self, "Alert!", "Mod already exists! Overwriting...")
-                #TODO: remove the previous contents of the file path
 
         #must ensure a unique name for any manually added mods (they receive an anonymous name because they are not officially part of the gamebanana library)
         if not gamebanana_item_type:
@@ -405,7 +403,14 @@ class ModManager(QWidget):
         if not mod_already_present: #add the mod to the mod list since its not there
             #the name is a combination of the real_name given and the filename, this is because of multiple file versions
             mod_name = mod_real_name + " (" + os.path.join(os.path.basename(archive_file_name), vpk_name) + ")"
-            item_widget = ModListItem(mod_name, mod_file_path, self.list_widget, main_window=self, number=self.list_widget.count() + 1, from_gamebanana=from_gamebanana)
+            if from_gamebanana:
+                if gamebanana_item_type == "Sound":
+                    link = "https://gamebanana.com/sounds/" + str(gamebanana_mod_number)
+                else:
+                    link = "https://gamebanana.com/mods/" + str(gamebanana_mod_number)
+            else:
+                link = ""
+            item_widget = ModListItem(mod_name, mod_file_path, self.list_widget, main_window=self, number=self.list_widget.count() + 1, from_gamebanana=from_gamebanana, link=link)
             list_item = QListWidgetItem(self.list_widget)
             item_widget.add_to_list(list_item)
             self.list_widget.scrollToItem(self.list_widget.item(self.list_widget.count() - 1), hint=QListWidget.PositionAtTop)
@@ -420,7 +425,7 @@ class ModManager(QWidget):
         if (item_type and not number) or (number and not item_type): #this is an invalid combination
             return False
         
-        if real_name and item_type:
+        if number and item_type:
             from_gamebanana = True
         else:
             from_gamebanana = False
@@ -529,6 +534,9 @@ class ModManager(QWidget):
                 else:
                     mod["toggled_on"] = False
                 mod["from_gamebanana"] = item_widget.from_gamebanana
+                if item_widget.link and item_widget.from_gamebanana:
+                    mod["link"] = item_widget.link
+
                 settings["mods"].append(mod)
 
             with open(SETTINGS_FILE_PATH, "w", encoding="utf-8") as settings_file:
@@ -556,8 +564,11 @@ class ModManager(QWidget):
                 file_path = mod["file_path"]
                 real_name = mod["name"]
                 from_gamebanana = mod["from_gamebanana"]
-
-                item_widget = ModListItem(real_name, file_path, self.list_widget, main_window=self, number=vpk_index, from_gamebanana=from_gamebanana)
+                if "link" in mod:
+                    link = mod["link"]
+                else:
+                    link = ""
+                item_widget = ModListItem(real_name, file_path, self.list_widget, main_window=self, number=vpk_index, from_gamebanana=from_gamebanana, link=link)
                 list_item = QListWidgetItem(self.list_widget)
 
                 if mod["toggled_on"]:
@@ -806,7 +817,7 @@ class ModListItem(QWidget):
     '''
     Custom list item widget for individual mods that supports holding nicknames, file paths, mod on/off toggle, and a self-removal button.
     '''
-    def __init__(self, name: str, file_path: str, list_widget: NumberedModListWidget, main_window: ModManager, number: int, from_gamebanana: bool=False) -> None:
+    def __init__(self, name: str, file_path: str, list_widget: NumberedModListWidget, main_window: ModManager, number: int, from_gamebanana: bool=False, link="") -> None:
         super().__init__() 
         self.list_widget = list_widget
         self.name = name
@@ -814,6 +825,7 @@ class ModListItem(QWidget):
         self.main_window = main_window #this should always be the mod manager window
         self.number = number #position in the mod list, index begins at 1
         self.from_gamebanana = from_gamebanana
+        self.link = link
 
         self.setObjectName("#modlist-item")
         layout = QHBoxLayout()
@@ -846,15 +858,26 @@ class ModListItem(QWidget):
         self.toggle = QCheckBox()
         self.toggle.setChecked(True)
         self.toggle.stateChanged.connect(lambda: self.main_window.save_profile() if self.main_window.finished_initial_load else None) #only save the config if finished loading
-        
         layout.addWidget(self.toggle)
 
+        if link:
+            details_button = QPushButton("Details") #this will direct you to the mod page within a web browser
+            details_button.setObjectName("download-button")
+            details_button.clicked.connect(lambda: webbrowser.open_new_tab(self.link))
+            layout.addWidget(details_button)
+
+            update_button = QPushButton("Update ↓", self)
+            update_button.setObjectName("download-button")
+            update_button.clicked.connect(self.update_mod)
+            layout.addWidget(update_button)
+
         #the remove button for mods
-        self.remove_button = QPushButton("X", self)
-        self.remove_button.setFixedWidth(20)
-        self.remove_button.setFixedHeight(20)
-        self.remove_button.clicked.connect(self.confirm_deletion) #deletes the mod from the list along with the actual file path if possible, after confirmation
-        layout.addWidget(self.remove_button)
+        remove_button = QPushButton("X", self)
+        remove_button.setFixedWidth(20)
+        remove_button.setFixedHeight(20)
+        remove_button.setObjectName("download-button")
+        remove_button.clicked.connect(self.confirm_deletion) #deletes the mod from the list along with the actual file path if possible, after confirmation
+        layout.addWidget(remove_button)
 
         self.setLayout(layout)
 
@@ -908,6 +931,27 @@ class ModListItem(QWidget):
             self.list_widget.renumber_items()
             delete_path_and_parent_recursive(self.file_path)
             self.main_window.save_profile() #save to the configuration file
+
+    def update_mod(self) -> None:
+        '''
+        Downloads the newest version of the mod. Will overwrite (and not create a new modlist item) if the version (filename) is the same as the one currently downloaded,
+        but will create a new modlist item if the version is newer.
+        '''
+        self.main_window.open_mod_browser()
+        from deadlock_mod_browser_features import _start_download_thread
+
+        if "sounds" in self.link:
+            item_type = "Sound"
+        else:
+            item_type = "Mod"
+        
+        #this will truncate everything after the last '(' character, because it is used for the updated filename (and it can't just be appended, because of the old filename)
+        bracket_index = self.name.rfind("(")
+        if bracket_index != -1:
+            new_name = self.name[:bracket_index]
+        else:
+            new_name = self.name
+        _start_download_thread(self.main_window, self.link, new_name, item_type, int(self.link.split("/")[-1]))
 
 if __name__ == "__main__":
     os.makedirs(APPLICATION_DIRECTORY, exist_ok=True) #create the directory for our application so we don't have to later

@@ -12,12 +12,11 @@ Firefox: https://www.firefox.com/
 
 Edge: https://www.microsoft.com/en-us/edge/download
 
-Any .rar files will require an unrar tool to open them and extract any mods inside (it is automatically done, but requires one to be installed). The most consistent one is unRAR,
-which comes as a part of winRAR (it's free). .zip, .7z, and raw .vpk files should be fine without any additional dependencies.
+Any .rar files will require an unrar tool to open them and extract any mods inside (it is automatically done, but requires one to be installed). The most consistent one is unRAR, which comes as a part of winRAR (it's free). .zip, .7z, and raw .vpk files should be fine without any additional dependencies.
 
 winRAR: https://www.win-rar.com/
 
-This application should be compatible with both Windows and Linux.
+This application should be mostly compatible with both Windows and Linux (Linux may require some xcb dependencies, and might have some bugs), but is mostly intended for Windows.
 
 # To build it yourself
 
@@ -35,9 +34,10 @@ Check the /vpkmaker/ directory to create your own sound mods.
 
 # Special Thanks
 
-Thanks to Valve for making the game, and to GameBanana and all its users for sharing all these mods. Thanks to Google for the font (Roboto).
+Thanks to Valve for making the game, and to GameBanana and all its users for sharing all these mods. Thanks to Google for the font (Roboto). I don't own Deadlock or the Deadlock icon.
 
 # DISCLAIMER
+
 This project is not affiliated with Valve or Deadlock, which is owned by Valve: https://www.valvesoftware.com/en/
 
 nor the website Gamebanana: https://gamebanana.com/

@@ -62,7 +62,7 @@ class SoundPreviewWidget(QWidget):
         self.sound_file_loaded = False
 
         #toggle button
-        self.play_pause_button = QPushButton("Preview Sound ♪")
+        self.play_pause_button = QPushButton("Preview Sound")
         self.play_pause_button.setObjectName("sound-preview")
         self.play_pause_button.clicked.connect(self._toggle_playback)
         layout.addWidget(self.play_pause_button)
@@ -123,9 +123,9 @@ class SoundPreviewWidget(QWidget):
         Update's the toggle button's text based on the media player's current playing state.
         '''
         if state == QMediaPlayer.PlayingState:
-            self.play_pause_button.setText("Pause ⏸")
+            self.play_pause_button.setText("Pause")
         else:
-            self.play_pause_button.setText("Preview Sound ♪")
+            self.play_pause_button.setText("Preview Sound")
 
     def closeEvent(self, event: QCloseEvent) -> None:
         '''
@@ -332,7 +332,7 @@ class SearchResultItemWidget(QWidget):
         if item_type == "Mod" or item_type == "Sound": #don't add the download button for requests/concepts/threads or any other item types
             self.download_button = QPushButton("Download  ↓")
             self.download_button.setObjectName("download-button")
-            self.download_button.clicked.connect(lambda: _start_download_thread(main_window, link, mod_name, item_type, number))
+            self.download_button.clicked.connect(lambda: (_start_download_thread(main_window, link, mod_name, item_type, number), self.download_button.setText("Download started!")))
             layout.addWidget(self.download_button)
 
         self.setFixedSize(*RESULT_ITEM_DIMENSIONS)

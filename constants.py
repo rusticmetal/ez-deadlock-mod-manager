@@ -9,6 +9,11 @@ IMAGE_PATH_SUFFIX = os.path.join("resources", "icon.png")
 FONTS_PATH_SUFFIX = os.path.join("resources", "fonts")
 
 APPLICATION_DIRECTORY = appdirs.user_data_dir("EZDeadlockModManager", "")
+#extracted mods are stored in the paths here
+GAMEBANANA_DIRECTORY = os.path.join(APPLICATION_DIRECTORY, "GameBanana")
+MOD_DIRECTORY = os.path.join(GAMEBANANA_DIRECTORY, "Mods")
+SOUND_DIRECTORY = os.path.join(GAMEBANANA_DIRECTORY, "Sounds")
+VPK_DIRECTORY = os.path.join(APPLICATION_DIRECTORY, "VPK Files")
 SETTINGS_FILE_PATH = os.path.join(APPLICATION_DIRECTORY, "settings.json")
 DOWNLOAD_FOLDER = os.path.join(APPLICATION_DIRECTORY, "Downloads")
 TEMPORARY_FOLDER_PREFIX = "EZDeadlockDownload_"
